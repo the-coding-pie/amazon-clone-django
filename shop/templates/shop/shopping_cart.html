@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% load get_image_url %}
+
+{% block title %}
+  {% if name %}
+    {{ name|title }}
+  {% else %}
+    Online Shopping for Electronics, Apparel, Computers, Books, DVDs & more
+  {% endif %}
+{% endblock %}
+
+{% block meta %}
+  <meta name="description" content="Free delivery on millions of items with Prime. Low prices across earth's biggest selection of books, music, DVDs, electronics, computers, software, apparel & accessories, shoes, jewelry, tools & hardware, housewares, furniture, sporting goods, beauty & personal care, groceries & just about anything else.">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h3 class="results">Shopping Cart</h3>
+  {% if products %}
+    <div class="products">
+      {% for item in products %}
+      <div class="product cart_page">
+        <div class="product__left">
+          <img src="{% get_image_url item.product.img %}" alt="{{ product.name }}">
+        </div>
+        <div class="product__middle">
+          <a href="{% url 'shop:detail' item.product.slug %}" class="name">
+            {{ item.product.name }}
+          </a>
+          <p data-id="{{ item.product.id }}" class="availability">
+            {% if item.product.stock > 0 %}
+              <span class="available">In Stock</span>
+            {% else %}
+              <span class="not_available">Out Of Stock</span>
+            {% endif %}
+          </p>
+          <div class="bottom">
+            <div class="quantity">
+                <span>Qty: </span>
+                <div class="count">
+                  {% if item.product.stock > 0 %}
+                    <svg data-id="{{ item.product.id }}" class="up_btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                  {% else %}
+                    <svg data-id="{{ item.product.id }}" class="disabled up_btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path></svg>
+                  {% endif %}
+                  
+                  <div data-id="{{ item.product.id }}" class="number">{{ item.quantity }}</div>
+                  
+                  {% if item.quantity == 1 %}
+                    <svg data-id="{{ item.product.id }}" class="disabled down_btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  {% else %}
+                    <svg data-id="{{ item.product.id }}" class="down_btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                  {% endif %}
+                </div>
+            </div>
+            <span class="line">
+              |
+            </span>
+            <div class="delete">
+              <span data-id="{{ item.product.id }}" class="delete_btn">Delete</span>
+            </div>
+          </div>
+        </div>
+        <div class="product__right">
+          <p class="price">
+            {{ item.price }}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+      <div class="sub_total">
+        <span>Subtotal(<span class="item_total_count"></span>):</span> <strong class="total"></strong>
+      </div>
+      <div class="checkout_btn_div">
+        <a href="{% url 'shop:checkout_page' %}" class="btn checkout_btn">Checkout</a>
+      </div>
+    </div>
+  {% else %}
+    <p>Your Cart is Empty!</p>
+  {% endif %}
+  </div>
+{% endblock %}

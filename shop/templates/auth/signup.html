@@ -1,0 +1,90 @@
+{% extends 'base_auth.html' %}
+{% load static %}
+
+{% block title %}
+  Signup
+{% endblock %}
+
+{% block meta %}
+  <meta name="description" content="Free delivery on millions of items with Prime. Low prices across earth's biggest selection of books, music, DVDs, electronics, computers, software, apparel & accessories, shoes, jewelry, tools & hardware, housewares, furniture, sporting goods, beauty & personal care, groceries & just about anything else.">
+{% endblock %}
+
+{% block content %}
+  <div class="signup">
+    <a href="{% url 'shop:home' %}">
+      <img class="amazon_logo" src="{% static 'icons/icon.png' %}" alt="amazon logo" />
+    </a>
+    <form action="" method="POST">
+      <h1>Create account</h1>
+
+      {% csrf_token %}
+      <p>
+        <label for="{{ form.your_name.id_for_label }}">{{ form.your_name.label }}</label> <br />
+        {{ form.your_name }}
+        {% if form.your_name.errors %}
+          <ul class="errors">
+            {% for error in form.your_name.errors %}
+            <li class="error">
+              {{ error }}
+            </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </p>
+
+      <p>
+        <label for="{{ form.email.id_for_label }}">{{ form.email.label }}</label> <br />
+        {{ form.email }}
+        {% if form.email.errors %}
+          <ul class="errors">
+            {% for error in form.email.errors %}
+            <li class="error">
+              {{ error }}
+            </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </p>
+
+      <p>
+        <label for="{{ form.password.id_for_label }}">{{ form.password.label }}</label> <br />
+        {{ form.password }}
+        {% if form.password.errors %}
+          <ul class="errors">
+            {% for error in form.password.errors %}
+            <li class="error">
+              {{ error }}
+            </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </p>
+
+      <p>
+        <label for="{{ form.re_enter_password.id_for_label }}">{{ form.re_enter_password.label }}</label> <br />
+        {{ form.re_enter_password }}
+        {% if form.re_enter_password.errors %}
+          <ul class="errors">
+            {% for error in form.re_enter_password.errors %}
+            <li class="error">
+              {{ error }}
+            </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </p>
+
+      <p>
+        <button class="btn" type="submit">Create your Amazon account</button>
+      </p>
+
+      <p class="agreement">
+        By creating an account, you agree to Amazon's Conditions of Use and Privacy Notice.
+      </p>
+
+      <p class="extras">
+        Already have an account? <a href="{% url 'shop:signin' %}">Sign-In</a>
+      </p>
+    </form>
+  </div>
+{% endblock %}

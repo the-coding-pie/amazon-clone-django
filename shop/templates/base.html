@@ -1,0 +1,120 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% block meta %}
+    {% endblock %}
+    <title>
+      Amazon.com:{% block title %} {% endblock %}
+    </title>
+    <link rel="icon" href="{% static 'icons/favicon.ico' %}" type="image/ico" sizes="32x32" />
+    <link rel="stylesheet" type="text/css" href="{% static 'shop/styles.css' %}" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="navbar__left">
+        <div class="navbar__icon">
+          <svg class="hamburger_btn" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </div>
+        <div class="navbar__logo">
+          <a href="/"><img src="{% static 'icons/logo.png' %}" alt="amazon logo"></a>
+        </div>
+      </div>
+      <div class="navbar__center">
+        <div class="navbar__search">
+          <form action="{% url 'shop:search' %}" method="get">
+            <input type="text" name="q" autocomplete="off" aria-label="Search" />
+            <button type="submit">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            </button>
+          </form>
+        </div>
+      </div>
+      <div class="navbar__right">
+        {% if user.is_authenticated %}
+          <a href="{% url 'shop:logout' %}" class="navbar__link">
+            Logout
+          </a>
+        {% else %}
+          <a href="{% url 'shop:signin' %}" class="navbar__link">
+            Login
+          </a>
+          <a href="{% url 'shop:signup' %}" class="navbar__link">
+            Signup
+          </a>
+        {% endif %}
+        <div class="navbar__cart">
+          <a href="{% url 'shop:shopping_cart' %}">
+            <span class="item_count">0</span>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+          </a>
+        </div>
+      </div>
+    </nav>
+    <div class="navbar__search__mobile">
+      <div class="navbar__search">
+        <form action="{% url 'shop:search' %}" method="get">
+          <input type="text" name="q" autocomplete="off" aria-label="Search" />
+          <button type="submit">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- side box -->
+    <div class="side_box hidden">
+      <div class="side_box__content">
+        <a href="#" class="top">
+          Hello, there!
+        </a>
+        <span class="shop_by_category">
+          Shop by category
+        </span>
+        {% if categories %}
+          {% for category in categories %}
+            <a href="{% url 'shop:category' category.slug %}" class="category">
+              {{ category.name|title }}
+            </a>
+          {% endfor %}
+        {% endif %}
+      </div>
+      <div class="side_box__background"></div>
+    </div>
+    <div class="msg_container">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li class="{{ message.tags }} message">
+            {{ message }}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+    </div>
+    {% block content %}
+    {% endblock %}
+    <footer>
+      <a href="#" class="top">
+        Back to top
+      </a>
+      <div class="center">
+        <div class="left">
+          <a href="/">Amazon.com</a>
+        </div>
+        <div class="right">
+          <a href="{% url 'shop:shopping_cart' %}">Your Cart</a>
+        </div>
+      </div>
+      <div class="bottom">
+        &copy; 1996-2020, Amazon.com, Inc. or its affiliates
+      </div>
+    </footer>
+
+    <script type="text/javascript" src="{% static 'shop/script.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shop/message.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shop/cart.js' %}" defer></script>
+  </body>
+</html>

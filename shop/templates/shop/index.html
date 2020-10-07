@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load get_image_url %}
+
+{% block title %}
+  {% if name %}
+    {{ name|title }}
+  {% else %}
+    Online Shopping for Electronics, Apparel, Computers, Books, DVDs & more
+  {% endif %}
+{% endblock %}
+
+{% block meta %}
+  <meta name="description" content="Free delivery on millions of items with Prime. Low prices across earth's biggest selection of books, music, DVDs, electronics, computers, software, apparel & accessories, shoes, jewelry, tools & hardware, housewares, furniture, sporting goods, beauty & personal care, groceries & just about anything else.">
+{% endblock %}
+
+{% block content %}
+  <div class="container">
+    <h3 class="results">RESULTS</h3>
+  {% if products %}
+    <div class="products">
+      {% for product in products %}
+      <div class="product">
+        <div class="product__left">
+          <img src="{% get_image_url product.img %}" alt="{{ product.name }}">
+        </div>
+        <div class="product__right">
+          <a href="{% url 'shop:category' product.category.slug %}" class="category">
+            {{ product.category }}
+          </a>
+          <a href="{% url 'shop:detail' product.slug %}" class="name">
+            {{ product.name }}
+          </a>
+          <p class="price">
+            {{ product.price }}
+          </p>
+          <p class="availability">
+            {% if product.stock > 0 %}
+              <span class="available">In Stock</span>
+            {% else %}
+              <span class="not_available">Out Of Stock</span>
+            {% endif %}
+          </p>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+  {% else %}
+    <p>No Products Found!</p>
+  {% endif %}
+  </div>
+{% endblock %}

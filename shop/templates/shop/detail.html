@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load get_image_url %}
+
+{% block title %}
+{{ product.name }}
+{% endblock %}
+
+{% block meta %}
+<meta name="description" content="{{ product.description }}">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+  <h4 class="category">Category > <a href="{% url 'shop:category' product.category.slug %}" class="catergory">
+      {{ product.category }}
+    </a></h4>
+  <div class="product_detail">
+    <div class="product_detail__left">
+      <img src="{% get_image_url product.img %}" alt="{{ product.name }}" class="image" />
+    </div>
+    <div class="product_detail__right">
+      <h1 class="name">
+        {{ product.name }}
+      </h1>
+
+      <p class="price">Price: <span>{{ product.price }}</span></p>
+      <div class="buttons">
+        {% if product.stock > 0 %}
+        <button data-id="{{ product.id }}" class="add_to_cart_btn">
+          Add to Cart
+        </button>
+        {% else %}
+        <button disabled data-id="{{ product.id }}" class="add_to_cart_btn">
+          Add to Cart
+        </button>
+        {% endif %}
+        <a href="{% url 'shop:shopping_cart' %}" class="go_to_cart_btn">
+          Go to Cart
+        </a>
+      </div>
+
+      <div class="details">
+        <h4>Details</h4>
+        <li>
+          Mfg: <span class="brand">{{ product.manufactured_on }}</span>
+        </li>
+      </div>
+
+      {% if product.features %}
+      <div class="about">
+        <h4>About this item</h4>
+        {{ product.features|safe }}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- similar items -->
+  {% if similar_items %}
+  <section class="similar_items">
+    <h4>Similar Items</h4>
+
+    <div class="items">
+      {% for item in similar_items %}
+      <div class="item">
+        <img src="{% get_image_url item.img %}" alt="{{ item.name }}">
+        <a href="{% url 'shop:detail' item.slug %}" class="name">
+          {{ item.name }}
+        </a>
+        <p class="price">
+          {{ item.price }}
+        </p>
+        {% if item.stock > 0 %}
+          <button data-id="{{ item.id }}" class="add_to_cart_btn">Add to Cart</button>
+        {% else %}
+          <button disabled data-id="{{ item.id }}" class="add_to_cart_btn">Add to Cart</button>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
+
+  <!-- description -->
+  <section class="description">
+    <h4>Description</h4>
+    {{ product.description }}
+  </section>
+</div>
+{% endblock %}
